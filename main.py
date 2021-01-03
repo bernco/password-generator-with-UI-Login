@@ -25,6 +25,28 @@ def password_gen():
 
     pyperclip.copy(password)
 
+# ---------------------------- SEARCH PASSWORD ------------------------------- #
+
+
+def search_details():
+    web = website_entry.get()
+    try:
+        with open("data.json", 'r') as file:
+            # read file
+            data = json.load(file)
+
+    except FileNotFoundError:
+        messagebox.showerror(title="Oops", message="Your password manager is empty")
+
+    else:
+        if web in data:
+            e_mail = data[web]["email"]
+            pass_wd = data[web]["password"]
+            messagebox.showinfo(title=f"{web}", message=f"Your details are:\nPassword: {pass_wd}\n"
+                                                        f"Email: {e_mail}")
+        else:
+            messagebox.showerror(title="Oops", message=f"Your {web} details was not found")
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add_data():
@@ -83,8 +105,8 @@ password_label = Label(text="Password:")
 password_label.grid(column=1, row=4)
 
 # entries
-website_entry = Entry(width=36)
-website_entry.grid(column=2, row=2, columnspan=2)
+website_entry = Entry(width=18)
+website_entry.grid(column=2, row=2)
 website_entry.focus()
 
 email_entry = Entry(width=36)
@@ -100,5 +122,8 @@ generate_button.grid(column=3, row=4, )
 
 add_button = Button(text="Add", width=30, command=add_data)
 add_button.grid(column=2, row=5, columnspan=2)
+
+search_button = Button(text="Search", width=14, command=search_details)
+search_button.grid(column=3, row=2)
 
 window.mainloop()
